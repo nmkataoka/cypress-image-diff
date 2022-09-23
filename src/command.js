@@ -3,6 +3,7 @@ import { recurse } from 'cypress-recurse';
 const compareSnapshotCommand = defaultScreenshotOptions => {
   const height = Cypress.config('viewportHeight') || 1440
   const width = Cypress.config('viewportWidth') || 1980
+  const defaultThreshold = (Cypress.config('env') || {}).defaultImageDiffThreshold || 0
 
   // Force screenshot resolution to keep consistency of test runs across machines
   Cypress.config('viewportHeight', parseInt(height, 10))
@@ -11,7 +12,7 @@ const compareSnapshotCommand = defaultScreenshotOptions => {
   Cypress.Commands.add(
     'compareSnapshot',
     { prevSubject: 'optional' },
-    (subject, name, testThreshold = 0, recurseOptions = {}) => {
+    (subject, name, testThreshold = defaultThreshold, recurseOptions = {}) => {
       const specName = Cypress.spec.name
       const testName = `${specName.replace('.js', '')}-${name}`
 
